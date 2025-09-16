@@ -14,7 +14,453 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      animals: {
+        Row: {
+          birth_date: string | null
+          breed: string | null
+          created_at: string | null
+          farm_id: string
+          gender: string | null
+          id: string
+          name: string | null
+          species: string
+          status: string | null
+          tag_id: string
+          updated_at: string | null
+          withdrawal_until_meat: string | null
+          withdrawal_until_milk: string | null
+        }
+        Insert: {
+          birth_date?: string | null
+          breed?: string | null
+          created_at?: string | null
+          farm_id: string
+          gender?: string | null
+          id?: string
+          name?: string | null
+          species: string
+          status?: string | null
+          tag_id: string
+          updated_at?: string | null
+          withdrawal_until_meat?: string | null
+          withdrawal_until_milk?: string | null
+        }
+        Update: {
+          birth_date?: string | null
+          breed?: string | null
+          created_at?: string | null
+          farm_id?: string
+          gender?: string | null
+          id?: string
+          name?: string | null
+          species?: string
+          status?: string | null
+          tag_id?: string
+          updated_at?: string | null
+          withdrawal_until_meat?: string | null
+          withdrawal_until_milk?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "animals_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_alerts: {
+        Row: {
+          alert_type: string
+          animal_id: string | null
+          created_at: string | null
+          description: string
+          farm_id: string
+          id: string
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+        }
+        Insert: {
+          alert_type: string
+          animal_id?: string | null
+          created_at?: string | null
+          description: string
+          farm_id: string
+          id?: string
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+        }
+        Update: {
+          alert_type?: string
+          animal_id?: string | null
+          created_at?: string | null
+          description?: string
+          farm_id?: string
+          id?: string
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_alerts_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_alerts_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultation_requests: {
+        Row: {
+          animal_id: string | null
+          consultation_type: string | null
+          created_at: string | null
+          farmer_id: string
+          feedback: string | null
+          id: string
+          notes: string | null
+          priority: string | null
+          rating: number | null
+          scheduled_at: string | null
+          status: string | null
+          symptoms: string
+          updated_at: string | null
+          vet_id: string | null
+        }
+        Insert: {
+          animal_id?: string | null
+          consultation_type?: string | null
+          created_at?: string | null
+          farmer_id: string
+          feedback?: string | null
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          rating?: number | null
+          scheduled_at?: string | null
+          status?: string | null
+          symptoms: string
+          updated_at?: string | null
+          vet_id?: string | null
+        }
+        Update: {
+          animal_id?: string | null
+          consultation_type?: string | null
+          created_at?: string | null
+          farmer_id?: string
+          feedback?: string | null
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          rating?: number | null
+          scheduled_at?: string | null
+          status?: string | null
+          symptoms?: string
+          updated_at?: string | null
+          vet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultation_requests_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultation_requests_farmer_id_fkey"
+            columns: ["farmer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultation_requests_vet_id_fkey"
+            columns: ["vet_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      faqs: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string | null
+          id: string
+          language: string | null
+          question: string
+          updated_at: string | null
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          question: string
+          updated_at?: string | null
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          question?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      farms: {
+        Row: {
+          address: string
+          created_at: string | null
+          farm_name: string
+          id: string
+          location: unknown | null
+          owner_id: string
+          registration_number: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          created_at?: string | null
+          farm_name: string
+          id?: string
+          location?: unknown | null
+          owner_id: string
+          registration_number?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          farm_name?: string
+          id?: string
+          location?: unknown | null
+          owner_id?: string
+          registration_number?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farms_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medications: {
+        Row: {
+          active_ingredient: string
+          created_at: string | null
+          dosage_instructions: string | null
+          id: string
+          med_name: string
+          withdrawal_period_meat_days: number
+          withdrawal_period_milk_hours: number
+        }
+        Insert: {
+          active_ingredient: string
+          created_at?: string | null
+          dosage_instructions?: string | null
+          id?: string
+          med_name: string
+          withdrawal_period_meat_days: number
+          withdrawal_period_milk_hours: number
+        }
+        Update: {
+          active_ingredient?: string
+          created_at?: string | null
+          dosage_instructions?: string | null
+          id?: string
+          med_name?: string
+          withdrawal_period_meat_days?: number
+          withdrawal_period_milk_hours?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          created_at: string | null
+          full_name: string
+          id: string
+          is_vet_verified: boolean | null
+          phone: string | null
+          preferred_language: string | null
+          reward_points: number | null
+          role: string
+          updated_at: string | null
+          user_id: string
+          vet_license_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string | null
+          full_name: string
+          id?: string
+          is_vet_verified?: boolean | null
+          phone?: string | null
+          preferred_language?: string | null
+          reward_points?: number | null
+          role: string
+          updated_at?: string | null
+          user_id: string
+          vet_license_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          is_vet_verified?: boolean | null
+          phone?: string | null
+          preferred_language?: string | null
+          reward_points?: number | null
+          role?: string
+          updated_at?: string | null
+          user_id?: string
+          vet_license_id?: string | null
+        }
+        Relationships: []
+      }
+      task_schedule: {
+        Row: {
+          animal_id: string
+          completed_at: string | null
+          created_at: string | null
+          description: string
+          id: string
+          notes: string | null
+          scheduled_date: string
+          scheduled_time: string | null
+          status: string | null
+          task_type: string
+          treatment_id: string | null
+        }
+        Insert: {
+          animal_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          notes?: string | null
+          scheduled_date: string
+          scheduled_time?: string | null
+          status?: string | null
+          task_type: string
+          treatment_id?: string | null
+        }
+        Update: {
+          animal_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          notes?: string | null
+          scheduled_date?: string
+          scheduled_time?: string | null
+          status?: string | null
+          task_type?: string
+          treatment_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_schedule_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_schedule_treatment_id_fkey"
+            columns: ["treatment_id"]
+            isOneToOne: false
+            referencedRelation: "treatments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      treatments: {
+        Row: {
+          animal_id: string
+          created_at: string | null
+          diagnosis: string
+          dosage: string
+          id: string
+          medication_id: string
+          notes: string | null
+          route_of_administration: string | null
+          treatment_end_date: string | null
+          treatment_start_date: string | null
+          vet_id: string
+        }
+        Insert: {
+          animal_id: string
+          created_at?: string | null
+          diagnosis: string
+          dosage: string
+          id?: string
+          medication_id: string
+          notes?: string | null
+          route_of_administration?: string | null
+          treatment_end_date?: string | null
+          treatment_start_date?: string | null
+          vet_id: string
+        }
+        Update: {
+          animal_id?: string
+          created_at?: string | null
+          diagnosis?: string
+          dosage?: string
+          id?: string
+          medication_id?: string
+          notes?: string | null
+          route_of_administration?: string | null
+          treatment_end_date?: string | null
+          treatment_start_date?: string | null
+          vet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatments_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatments_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatments_vet_id_fkey"
+            columns: ["vet_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
