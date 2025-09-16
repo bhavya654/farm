@@ -189,10 +189,11 @@ const Auth = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="Select your role" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="farmer">Farmer</SelectItem>
-                        <SelectItem value="veterinarian">Veterinarian</SelectItem>
-                      </SelectContent>
+                     <Select value={formData.role} onValueChange={(value) => handleInputChange('role', value)}>
+                          <SelectItem value="farmer">Farmer</SelectItem>
+                          <SelectItem value="veterinarian">Veterinarian</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                       </Select>
                     </Select>
                   </div>
                   {formData.role === "veterinarian" && (
