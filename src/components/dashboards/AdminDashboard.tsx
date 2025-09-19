@@ -109,6 +109,50 @@ const AdminDashboard = () => {
     }
   };
 
+  const getChartData = () => {
+    // User role distribution
+    const roleData = users.reduce((acc: any, user) => {
+      const role = user.role || 'unknown';
+      acc[role] = (acc[role] || 0) + 1;
+      return acc;
+    }, {});
+
+    const userRoleChartData = Object.entries(roleData).map(([name, value]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      value: value as number
+    }));
+
+    // Platform growth (simulated data - last 7 days)
+    const growthData = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString('en-US', { weekday: 'short' });
+      
+      // Simulate growth data
+      const newUsers = Math.floor(Math.random() * 10) + 1;
+      
+      growthData.push({
+        name: dateStr,
+        value: newUsers
+      });
+    }
+
+    // Alert severity distribution
+    const severityData = alerts.reduce((acc: any, alert) => {
+      const severity = alert.severity || 'medium';
+      acc[severity] = (acc[severity] || 0) + 1;
+      return acc;
+    }, {});
+
+    const alertSeverityChartData = Object.entries(severityData).map(([name, value]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      value: value as number
+    }));
+
+    return { userRoleChartData, growthData, alertSeverityChartData };
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -295,7 +339,43 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+            </TabsContent>
+
+            <TabsContent value="analytics">
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-card-foreground flex items-center gap-2">
+                  <PieChart className="h-5 w-5" />
+                  Platform Analytics
+                </h3>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <DashboardChart
+                    title="User Role Distribution"
+                    data={getChartData().userRoleChartData}
+                    type="pie"
+                    height={250}
+                  />
+                  
+                  <DashboardChart
+                    title="Alert Severity Levels"
+                    data={getChartData().alertSeverityChartData}
+                    type="bar"
+                    color="hsl(var(--destructive))"
+                    height={250}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 gap-6">
+                  <DashboardChart
+                    title="Platform Growth (New Users Daily)"
+                    data={getChartData().growthData}
+                    type="area"
+                    color="hsl(var(--success))"
+                    height={200}
+                  />
+                </div>
+              </div>
+            </TabsContent>
 
           <TabsContent value="users" className="space-y-6">
             <Card>

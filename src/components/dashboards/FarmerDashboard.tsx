@@ -262,7 +262,43 @@ const FarmerDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </TabsContent>
+
+            <TabsContent value="analytics">
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-card-foreground flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Farm Analytics
+                </h3>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <DashboardChart
+                    title="Animal Species Distribution"
+                    data={getChartData().animalChartData}
+                    type="pie"
+                    height={250}
+                  />
+                  
+                  <DashboardChart
+                    title="Task Completion (Last 7 Days)"
+                    data={getChartData().taskData}
+                    type="bar"
+                    color="hsl(var(--success))"
+                    height={250}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 gap-6">
+                  <DashboardChart
+                    title="Health Status Overview"
+                    data={getChartData().healthData}
+                    type="area"
+                    color="hsl(var(--primary))"
+                    height={200}
+                  />
+                </div>
+              </div>
+            </TabsContent>
 
           <TabsContent value="tasks" className="space-y-6">
             <Card>
