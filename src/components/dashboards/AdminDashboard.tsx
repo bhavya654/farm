@@ -20,8 +20,11 @@ import {
   Search,
   Eye,
   UserCheck,
-  UserX
+  UserX,
+  PieChart
 } from 'lucide-react';
+import DashboardChart from '@/components/charts/DashboardChart';
+import Chatbot from '@/components/Chatbot';
 
 const AdminDashboard = () => {
   const { profile, signOut } = useAuth();
@@ -268,10 +271,11 @@ const AdminDashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="users">User Management</TabsTrigger>
             <TabsTrigger value="compliance">Compliance</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
           </TabsList>
 
@@ -527,6 +531,8 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
         </Tabs>
+        
+        <Chatbot context="admin" />
       </div>
     </div>
   );

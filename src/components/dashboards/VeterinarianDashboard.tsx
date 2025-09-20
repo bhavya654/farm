@@ -20,8 +20,13 @@ import {
   Search,
   User,
   LogOut,
-  Plus
+  Plus,
+  BarChart3
 } from 'lucide-react';
+import DashboardChart from '@/components/charts/DashboardChart';
+import SchedulingModal from '@/components/SchedulingModal';
+import PrescriptionDownload from '@/components/PrescriptionDownload';
+import Chatbot from '@/components/Chatbot';
 
 const VeterinarianDashboard = () => {
   const { profile, signOut } = useAuth();
@@ -37,6 +42,43 @@ const VeterinarianDashboard = () => {
     notes: ''
   });
   const [loading, setLoading] = useState(true);
+  const [showSchedulingModal, setShowSchedulingModal] = useState(false);
+
+  const getChartData = () => {
+    const consultationsByStatus = consultationRequests.reduce((acc, request) => {
+      const status = request.status || 'pending';
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {});
+
+    const consultationChartData = Object.entries(consultationsByStatus).map(([name, value]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      value: value as number
+    }));
+
+    const priorityByLevel = consultationRequests.reduce((acc, request) => {
+      const priority = request.priority || 'routine';
+      acc[priority] = (acc[priority] || 0) + 1;
+      return acc;
+    }, {});
+
+    const priorityChartData = Object.entries(priorityByLevel).map(([name, value]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      value: value as number
+    }));
+
+    const healthData = [
+      { name: 'Mon', value: 12 },
+      { name: 'Tue', value: 8 },
+      { name: 'Wed', value: 15 },
+      { name: 'Thu', value: 11 },
+      { name: 'Fri', value: 9 },
+      { name: 'Sat', value: 6 },
+      { name: 'Sun', value: 4 }
+    ];
+
+    return { consultationChartData, priorityChartData, healthData };
+  };
 
   useEffect(() => {
     fetchDashboardData();
@@ -252,10 +294,11 @@ const VeterinarianDashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="consultations" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="consultations">Consultations</TabsTrigger>
             <TabsTrigger value="animals">Animals</TabsTrigger>
             <TabsTrigger value="prescribe">Prescribe</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
           </TabsList>
 
@@ -498,19 +541,41 @@ const VeterinarianDashboard = () => {
           <TabsContent value="schedule" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Visit Schedule</CardTitle>
+                <CardTitle>Schedule Farm Visits</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">
-                    Schedule management coming soon...
-                  </p>
+                <div className="space-y-4">
+                  <Button 
+                    onClick={() => setShowSchedulingModal(true)}
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Schedule New Visit
+                  </Button>
+                  
+                  <div className="text-center py-8">
+                    <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">
+                      No scheduled visits. Click above to schedule your first visit.
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
+        
+        <SchedulingModal 
+          open={showSchedulingModal}
+          onOpenChange={setShowSchedulingModal}
+          vetId={profile?.id || ''}
+          onScheduled={() => {
+            setShowSchedulingModal(false);
+            fetchDashboardData();
+          }}
+        />
+        
+        <Chatbot context="vet" />
       </div>
     </div>
   );

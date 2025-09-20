@@ -15,8 +15,13 @@ import {
   Phone,
   User,
   LogOut,
-  Bell
+  Bell,
+  BarChart3
 } from 'lucide-react';
+import DashboardChart from '@/components/charts/DashboardChart';
+import AnimalManagementModal from '@/components/AnimalManagementModal';
+import SchedulingModal from '@/components/SchedulingModal';
+import Chatbot from '@/components/Chatbot';
 
 const FarmerDashboard = () => {
   const { profile, signOut } = useAuth();
@@ -24,6 +29,38 @@ const FarmerDashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAnimalModal, setShowAnimalModal] = useState(false);
+  const [userFarmId, setUserFarmId] = useState<string | null>(null);
+
+  const getChartData = () => {
+    const animalsBySpecies = animals.reduce((acc, animal) => {
+      const species = animal.species || 'Unknown';
+      acc[species] = (acc[species] || 0) + 1;
+      return acc;
+    }, {});
+
+    const animalChartData = Object.entries(animalsBySpecies).map(([name, value]) => ({
+      name,
+      value: value as number
+    }));
+
+    const taskData = [
+      { name: 'Mon', value: 5 },
+      { name: 'Tue', value: 8 },
+      { name: 'Wed', value: 6 },
+      { name: 'Thu', value: 7 },
+      { name: 'Fri', value: 9 },
+      { name: 'Sat', value: 4 },
+      { name: 'Sun', value: 3 }
+    ];
+
+    const healthData = [
+      { name: 'Healthy', value: animals.filter(a => !a.withdrawal_until_milk && !a.withdrawal_until_meat).length },
+      { name: 'In Treatment', value: animals.filter(a => a.withdrawal_until_milk || a.withdrawal_until_meat).length }
+    ];
+
+    return { animalChartData, taskData, healthData };
+  };
 
   useEffect(() => {
     fetchDashboardData();
@@ -39,6 +76,7 @@ const FarmerDashboard = () => {
 
       if (farms && farms.length > 0) {
         const farmIds = farms.map(farm => farm.id);
+        setUserFarmId(farms[0].id); // Set first farm as default
 
         // Fetch animals
         const { data: animalsData } = await supabase
@@ -202,9 +240,10 @@ const FarmerDashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="herd" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="herd">My Herd</TabsTrigger>
             <TabsTrigger value="tasks">Today's Tasks</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="consultation">Consultation</TabsTrigger>
             <TabsTrigger value="rewards">Rewards</TabsTrigger>
           </TabsList>
@@ -213,7 +252,7 @@ const FarmerDashboard = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>My Animals</CardTitle>
-                <Button>
+                <Button onClick={() => setShowAnimalModal(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Animal
                 </Button>
@@ -410,6 +449,17 @@ const FarmerDashboard = () => {
             </Card>
           </TabsContent>
         </Tabs>
+        
+        {userFarmId && (
+          <AnimalManagementModal
+            open={showAnimalModal}
+            onOpenChange={setShowAnimalModal}
+            farmId={userFarmId}
+            onAnimalAdded={fetchDashboardData}
+          />
+        )}
+        
+        <Chatbot context="farmer" />
       </div>
     </div>
   );
