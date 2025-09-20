@@ -14,6 +14,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -39,26 +40,42 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrors([]);
 
     try {
       if (isLogin) {
-        const { error } = await signIn(formData.email, formData.password);
-        if (!error) {
-          navigate('/dashboard');
-        }
-      } else {
-        if (formData.password !== formData.confirmPassword) {
-          alert('Passwords do not match');
-          return;
-        }
-        
-        if (!formData.fullName || !formData.role) {
-          alert('Please fill in all required fields');
+        if (!formData.email || !formData.password) {
+          setErrors(['Please fill in all fields']);
           return;
         }
 
-        if (formData.role === 'veterinarian' && !formData.vetLicenseId) {
-          alert('Veterinary License ID is required for veterinarians');
+        const { error } = await signIn(formData.email, formData.password);
+        if (!error) {
+          console.log('Login successful, redirecting to dashboard...');
+          navigate('/dashboard');
+        } else {
+          setErrors([error.message]);
+        }
+      } else {
+        // Validation for signup
+        const validationErrors = [];
+        
+        if (!formData.fullName.trim()) validationErrors.push('Full name is required');
+        if (!formData.email.trim()) validationErrors.push('Email is required');
+        if (!formData.role) validationErrors.push('Please select a role');
+        if (!formData.password) validationErrors.push('Password is required');
+        if (formData.password !== formData.confirmPassword) {
+          validationErrors.push('Passwords do not match');
+        }
+        if (formData.password && formData.password.length < 6) {
+          validationErrors.push('Password must be at least 6 characters long');
+        }
+        if (formData.role === 'veterinarian' && !formData.vetLicenseId.trim()) {
+          validationErrors.push('Veterinary License ID is required for veterinarians');
+        }
+
+        if (validationErrors.length > 0) {
+          setErrors(validationErrors);
           return;
         }
 
@@ -80,10 +97,13 @@ const Auth = () => {
             vetLicenseId: ''
           });
           setIsLogin(true);
+        } else {
+          setErrors([error.message]);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Auth error:', error);
+      setErrors([error?.message || 'An unexpected error occurred']);
     } finally {
       setIsSubmitting(false);
     }
@@ -122,6 +142,15 @@ const Auth = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {errors.length > 0 && (
+                  <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                    <ul className="text-sm text-destructive space-y-1">
+                      {errors.map((error, index) => (
+                        <li key={index}>• {error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <Label htmlFor="login-email">Email Address</Label>
@@ -160,6 +189,15 @@ const Auth = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {errors.length > 0 && (
+                  <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                    <ul className="text-sm text-destructive space-y-1">
+                      {errors.map((error, index) => (
+                        <li key={index}>• {error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <Label htmlFor="signup-name">Full Name</Label>
