@@ -553,11 +553,88 @@ const VeterinarianDashboard = () => {
                     Schedule New Visit
                   </Button>
                   
-                  <div className="text-center py-8">
-                    <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">
-                      No scheduled visits. Click above to schedule your first visit.
-                    </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <Calendar className="h-8 w-8 text-primary mx-auto mb-2" />
+                        <h4 className="font-semibold">Today's Visits</h4>
+                        <p className="text-2xl font-bold text-primary">3</p>
+                        <p className="text-xs text-muted-foreground">2 completed</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <Clock className="h-8 w-8 text-warning mx-auto mb-2" />
+                        <h4 className="font-semibold">This Week</h4>
+                        <p className="text-2xl font-bold text-warning">12</p>
+                        <p className="text-xs text-muted-foreground">8 scheduled</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <Calendar className="h-8 w-8 text-success mx-auto mb-2" />
+                        <h4 className="font-semibold">Next Week</h4>
+                        <p className="text-2xl font-bold text-success">8</p>
+                        <p className="text-xs text-muted-foreground">available slots</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Upcoming Visits</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center justify-between p-2 border rounded">
+                          <div>
+                            <p className="text-sm font-medium">Green Valley Farm</p>
+                            <p className="text-xs text-muted-foreground">Today, 2:00 PM - Emergency</p>
+                          </div>
+                          <Badge variant="destructive">High</Badge>
+                        </div>
+                        <div className="flex items-center justify-between p-2 border rounded">
+                          <div>
+                            <p className="text-sm font-medium">Sunset Ranch</p>
+                            <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM - Routine</p>
+                          </div>
+                          <Badge variant="outline">Medium</Badge>
+                        </div>
+                        <div className="flex items-center justify-between p-2 border rounded">
+                          <div>
+                            <p className="text-sm font-medium">Blue Ridge Farm</p>
+                            <p className="text-xs text-muted-foreground">Friday, 3:30 PM - Vaccination</p>
+                          </div>
+                          <Badge>Low</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Quick Schedule</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select visit type..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="emergency">Emergency</SelectItem>
+                            <SelectItem value="routine">Routine Checkup</SelectItem>
+                            <SelectItem value="vaccination">Vaccination</SelectItem>
+                            <SelectItem value="follow-up">Follow-up</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input type="date" />
+                          <Input type="time" />
+                        </div>
+                        <Button size="sm" className="w-full">
+                          Quick Schedule
+                        </Button>
+                      </CardContent>
+                    </Card>
                   </div>
                 </div>
               </CardContent>

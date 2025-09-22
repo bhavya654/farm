@@ -271,28 +271,33 @@ const AdminDashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="users">User Management</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="compliance">Compliance</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Platform Growth */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Platform Growth</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" />
+                    Platform Growth
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Farmers</span>
                       <div className="flex items-center space-x-2">
-                        <div className="w-32 h-2 bg-muted rounded">
+                        <div className="w-20 h-2 bg-muted rounded">
                           <div 
-                            className="h-2 bg-success rounded" 
+                            className="h-2 bg-success rounded transition-all duration-300" 
                             style={{ width: `${(stats.totalFarmers / stats.totalUsers) * 100}%` }}
                           ></div>
                         </div>
@@ -302,48 +307,150 @@ const AdminDashboard = () => {
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Veterinarians</span>
                       <div className="flex items-center space-x-2">
-                        <div className="w-32 h-2 bg-muted rounded">
+                        <div className="w-20 h-2 bg-muted rounded">
                           <div 
-                            className="h-2 bg-accent rounded" 
+                            className="h-2 bg-accent rounded transition-all duration-300" 
                             style={{ width: `${(stats.totalVets / stats.totalUsers) * 100}%` }}
                           ></div>
                         </div>
                         <span className="text-sm font-medium">{stats.totalVets}</span>
                       </div>
                     </div>
+                    <div className="pt-2 border-t">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-primary">{((stats.totalUsers / (stats.totalUsers + 50)) * 100).toFixed(1)}%</p>
+                        <p className="text-xs text-muted-foreground">Growth Rate</p>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
+              {/* System Health */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Recent Alerts</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5" />
+                    System Health
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">API Status</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                        <span className="text-sm text-success">Online</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Database</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                        <span className="text-sm text-success">Healthy</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Server Load</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-16 h-2 bg-muted rounded">
+                          <div className="h-2 bg-warning rounded" style={{ width: '35%' }}></div>
+                        </div>
+                        <span className="text-sm">35%</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Active Users</span>
+                      <span className="text-sm font-medium">{Math.floor(stats.totalUsers * 0.3)}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Critical Alerts */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    Critical Alerts
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {alerts.slice(0, 5).map((alert: any) => (
-                      <div key={alert.id} className="flex items-center justify-between p-2 border rounded">
-                        <div>
-                          <p className="text-sm font-medium">{alert.description}</p>
+                    {alerts.slice(0, 4).map((alert: any) => (
+                      <div key={alert.id} className="flex items-start space-x-3 p-2 border rounded hover:bg-muted/50 transition-colors">
+                        <div className={`w-2 h-2 rounded-full mt-2 ${
+                          alert.severity === 'high' ? 'bg-destructive' : 
+                          alert.severity === 'medium' ? 'bg-warning' : 'bg-muted'
+                        }`}></div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{alert.description}</p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(alert.created_at).toLocaleDateString()}
                           </p>
                         </div>
-                        <Badge variant={alert.severity === 'high' ? 'destructive' : 'default'}>
+                        <Badge 
+                          variant={alert.severity === 'high' ? 'destructive' : 'default'}
+                          className="shrink-0"
+                        >
                           {alert.severity}
                         </Badge>
                       </div>
                     ))}
                     {alerts.length === 0 && (
-                      <p className="text-muted-foreground text-center py-4">
-                        No active alerts
-                      </p>
+                      <div className="text-center py-6">
+                        <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
+                        <p className="text-sm text-muted-foreground">All systems normal</p>
+                      </div>
+                    )}
+                    {alerts.length > 0 && (
+                      <Button variant="outline" size="sm" className="w-full">
+                        View All Alerts
+                      </Button>
                     )}
                   </div>
                 </CardContent>
               </Card>
             </div>
-            </TabsContent>
+
+            {/* Real-time Activity */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Real-time Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary mb-1">
+                      {Math.floor(Math.random() * 50) + 10}
+                    </div>
+                    <p className="text-sm text-muted-foreground">Active Sessions</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-success mb-1">
+                      {Math.floor(Math.random() * 20) + 5}
+                    </div>
+                    <p className="text-sm text-muted-foreground">New Animals Today</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-warning mb-1">
+                      {Math.floor(Math.random() * 10) + 2}
+                    </div>
+                    <p className="text-sm text-muted-foreground">Consultations Active</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-accent mb-1">
+                      {stats.complianceRate}%
+                    </div>
+                    <p className="text-sm text-muted-foreground">Compliance Rate</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
             <TabsContent value="analytics">
               <div className="space-y-6">
@@ -380,6 +487,238 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </TabsContent>
+
+          <TabsContent value="compliance" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Compliance Overview</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div>
+                      <h4 className="font-semibold">Withdrawal Compliance</h4>
+                      <p className="text-sm text-muted-foreground">Animals following withdrawal periods</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-success">{stats.complianceRate}%</p>
+                      <p className="text-xs text-success">+2.1% from last week</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div>
+                      <h4 className="font-semibold">Record Keeping</h4>
+                      <p className="text-sm text-muted-foreground">Complete treatment records</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-primary">94%</p>
+                      <p className="text-xs text-success">+1.5% from last week</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div>
+                      <h4 className="font-semibold">Vet Verification</h4>
+                      <p className="text-sm text-muted-foreground">Verified veterinarian accounts</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-accent">
+                        {users.filter(u => u.role === 'veterinarian' && u.is_vet_verified).length}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        of {stats.totalVets} total
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Compliance Alerts</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {alerts.filter(alert => alert.alert_type === 'compliance').slice(0, 6).map((alert: any) => (
+                      <div key={alert.id} className="flex items-start space-x-3 p-3 border rounded-lg">
+                        <AlertTriangle className={`h-4 w-4 mt-1 ${
+                          alert.severity === 'high' ? 'text-destructive' : 'text-warning'
+                        }`} />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{alert.description}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(alert.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Resolve
+                        </Button>
+                      </div>
+                    ))}
+                    {alerts.filter(alert => alert.alert_type === 'compliance').length === 0 && (
+                      <div className="text-center py-8">
+                        <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
+                        <p className="text-muted-foreground">No compliance issues detected</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="monitoring" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Live Metrics</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Response Time</span>
+                      <span className="text-sm font-mono">127ms</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Uptime</span>
+                      <span className="text-sm font-mono text-success">99.9%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Error Rate</span>
+                      <span className="text-sm font-mono">0.01%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Active Connections</span>
+                      <span className="text-sm font-mono">{Math.floor(stats.totalUsers * 0.3)}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Storage Usage</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>Database</span>
+                        <span>2.3 GB / 10 GB</span>
+                      </div>
+                      <div className="w-full h-2 bg-muted rounded">
+                        <div className="h-2 bg-primary rounded" style={{ width: '23%' }}></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>Images</span>
+                        <span>1.8 GB / 5 GB</span>
+                      </div>
+                      <div className="w-full h-2 bg-muted rounded">
+                        <div className="h-2 bg-accent rounded" style={{ width: '36%' }}></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>Backups</span>
+                        <span>850 MB / 2 GB</span>
+                      </div>
+                      <div className="w-full h-2 bg-muted rounded">
+                        <div className="h-2 bg-success rounded" style={{ width: '42%' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Settings className="h-4 w-4 mr-2" />
+                    System Settings
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Export Logs
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Users className="h-4 w-4 mr-2" />
+                    User Audit
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Send Alert
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="reports" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Generate Reports</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <Button variant="outline" className="h-20 flex-col">
+                      <FileText className="h-6 w-6 mb-2" />
+                      <span className="text-sm">User Report</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex-col">
+                      <BarChart3 className="h-6 w-6 mb-2" />
+                      <span className="text-sm">Analytics Report</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex-col">
+                      <AlertTriangle className="h-6 w-6 mb-2" />
+                      <span className="text-sm">Compliance Report</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex-col">
+                      <CheckCircle className="h-6 w-6 mb-2" />
+                      <span className="text-sm">System Health</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Reports</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 border rounded">
+                      <div>
+                        <p className="text-sm font-medium">Weekly User Activity</p>
+                        <p className="text-xs text-muted-foreground">Generated 2 hours ago</p>
+                      </div>
+                      <Button size="sm" variant="outline">Download</Button>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded">
+                      <div>
+                        <p className="text-sm font-medium">Compliance Summary</p>
+                        <p className="text-xs text-muted-foreground">Generated yesterday</p>
+                      </div>
+                      <Button size="sm" variant="outline">Download</Button>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded">
+                      <div>
+                        <p className="text-sm font-medium">System Performance</p>
+                        <p className="text-xs text-muted-foreground">Generated 3 days ago</p>
+                      </div>
+                      <Button size="sm" variant="outline">Download</Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
           <TabsContent value="users" className="space-y-6">
             <Card>

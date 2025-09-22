@@ -21,6 +21,7 @@ import {
 import DashboardChart from '@/components/charts/DashboardChart';
 import AnimalManagementModal from '@/components/AnimalManagementModal';
 import SchedulingModal from '@/components/SchedulingModal';
+import VideoCall from '@/components/VideoCall';
 import Chatbot from '@/components/Chatbot';
 
 const FarmerDashboard = () => {
@@ -389,9 +390,16 @@ const FarmerDashboard = () => {
                       <Video className="h-12 w-12 text-primary mx-auto mb-4" />
                       <h3 className="font-semibold mb-2">Video Consultation</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Schedule a video call with a veterinarian
+                        Connect with a veterinarian instantly
                       </p>
-                      <Button className="w-full">Schedule Video Call</Button>
+                      <VideoCall 
+                        trigger={
+                          <Button className="w-full">
+                            <Video className="h-4 w-4 mr-2" />
+                            Start Video Call
+                          </Button>
+                        }
+                      />
                     </CardContent>
                   </Card>
                   
