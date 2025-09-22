@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Plus, 
   Calendar, 
@@ -26,6 +27,7 @@ import Chatbot from '@/components/Chatbot';
 
 const FarmerDashboard = () => {
   const { profile, signOut } = useAuth();
+  const { toast } = useToast();
   const [animals, setAnimals] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -410,7 +412,37 @@ const FarmerDashboard = () => {
                       <p className="text-sm text-muted-foreground mb-4">
                         Report urgent health issues
                       </p>
-                      <Button variant="outline" className="w-full">Report Problem</Button>
+                      <Button variant="outline" className="w-full" onClick={() => {
+                        // Create consultation request functionality
+                        const reportProblem = async () => {
+                          try {
+                            const { error } = await supabase
+                              .from('consultation_requests')
+                              .insert({
+                                farmer_id: profile?.id,
+                                consultation_type: 'emergency',
+                                symptoms: 'Urgent health issue reported via emergency button',
+                                priority: 'emergency',
+                                status: 'pending'
+                              });
+                            
+                            if (error) throw error;
+                            
+                            toast({
+                              title: "Emergency Report Sent",
+                              description: "A veterinarian will respond to your emergency request shortly",
+                            });
+                          } catch (error) {
+                            console.error('Error reporting problem:', error);
+                            toast({
+                              title: "Error",
+                              description: "Failed to send emergency report. Please try again.",
+                              variant: "destructive",
+                            });
+                          }
+                        };
+                        reportProblem();
+                      }}>Report Problem</Button>
                     </CardContent>
                   </Card>
                 </div>

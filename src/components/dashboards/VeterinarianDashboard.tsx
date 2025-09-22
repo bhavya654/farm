@@ -21,11 +21,14 @@ import {
   User,
   LogOut,
   Plus,
-  BarChart3
+  BarChart3,
+  Video,
+  Phone
 } from 'lucide-react';
 import DashboardChart from '@/components/charts/DashboardChart';
 import SchedulingModal from '@/components/SchedulingModal';
 import PrescriptionDownload from '@/components/PrescriptionDownload';
+import VideoCall from '@/components/VideoCall';
 import Chatbot from '@/components/Chatbot';
 
 const VeterinarianDashboard = () => {
@@ -294,10 +297,11 @@ const VeterinarianDashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="consultations" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="consultations">Consultations</TabsTrigger>
             <TabsTrigger value="animals">Animals</TabsTrigger>
             <TabsTrigger value="prescribe">Prescribe</TabsTrigger>
+            <TabsTrigger value="videocall">Video Call</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
           </TabsList>
@@ -400,9 +404,74 @@ const VeterinarianDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            </TabsContent>
+          </TabsContent>
 
-            <TabsContent value="analytics">
+          <TabsContent value="videocall" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Video Consultation Platform</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Video className="h-12 w-12 text-primary mx-auto mb-4" />
+                      <h3 className="font-semibold mb-2">Start Video Consultation</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Connect with farmers for remote consultations
+                      </p>
+                      <VideoCall 
+                        trigger={
+                          <Button className="w-full">
+                            <Video className="h-4 w-4 mr-2" />
+                            Start Video Call
+                          </Button>
+                        }
+                      />
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
+                      <h3 className="font-semibold mb-2">Emergency Response</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Handle urgent consultation requests
+                      </p>
+                      <Button variant="outline" className="w-full">
+                        <Phone className="h-4 w-4 mr-2" />
+                        Answer Emergency Call
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                <div className="mt-6">
+                  <h4 className="font-semibold mb-4">Active Consultations</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 border rounded-lg bg-accent/5">
+                      <div>
+                        <p className="font-medium">Green Valley Farm</p>
+                        <p className="text-sm text-muted-foreground">Cattle health consultation in progress</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                        <span className="text-sm text-success">Live</span>
+                        <Button size="sm" variant="outline">Join</Button>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Video className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>No other active consultations</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="analytics">
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-card-foreground flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
