@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import FarmerDashboard from '@/components/dashboards/FarmerDashboard';
 import VeterinarianDashboard from '@/components/dashboards/VeterinarianDashboard';
 import AdminDashboard from '@/components/dashboards/AdminDashboard';
+import LabDashboard from '@/components/dashboards/LabDashboard';
 
 const Dashboard = () => {
   const { user, profile, loading } = useAuth();
@@ -33,13 +34,15 @@ const Dashboard = () => {
 
   console.log('Rendering dashboard for role:', profile.role);
 
-  switch (profile.role) {
+  switch (profile.role as 'farmer' | 'veterinarian' | 'admin' | 'lab') {
     case 'farmer':
       return <FarmerDashboard />;
     case 'veterinarian':
       return <VeterinarianDashboard />;
     case 'admin':
       return <AdminDashboard />;
+    case 'lab':
+      return <LabDashboard />;
     default:
       console.error('Unknown role:', profile.role);
       return (

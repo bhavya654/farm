@@ -23,13 +23,14 @@ import {
   Plus,
   BarChart3,
   Video,
-  Phone
+  Phone,
+  TestTube
 } from 'lucide-react';
 import DashboardChart from '@/components/charts/DashboardChart';
-import SchedulingModal from '@/components/SchedulingModal';
-import PrescriptionDownload from '@/components/PrescriptionDownload';
 import VideoCall from '@/components/VideoCall';
+import SchedulingModal from '@/components/SchedulingModal';
 import Chatbot from '@/components/Chatbot';
+import TestingReportsModal from '@/components/TestingReportsModal';
 
 const VeterinarianDashboard = () => {
   const { profile, signOut } = useAuth();
@@ -46,6 +47,8 @@ const VeterinarianDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [showSchedulingModal, setShowSchedulingModal] = useState(false);
+  const [testingReports, setTestingReports] = useState([]);
+  const [showTestingModal, setShowTestingModal] = useState(false);
 
   const getChartData = () => {
     const consultationsByStatus = consultationRequests.reduce((acc, request) => {
@@ -110,8 +113,19 @@ const VeterinarianDashboard = () => {
         `)
         .order('created_at', { ascending: false });
 
+      // Fetch testing reports
+      const { data: testingData } = await supabase
+        .from('testing_reports')
+        .select(`
+          *,
+          animals (name, tag_id, species)
+        `)
+        .eq('vet_id', profile?.id)
+        .order('requested_at', { ascending: false });
+
       setConsultationRequests(requests || []);
       setAnimals(animalsData || []);
+      setTestingReports(testingData || []);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
@@ -401,6 +415,93 @@ const VeterinarianDashboard = () => {
                       </Card>
                     );
                   })}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="testing" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-semibold">Lab Testing Reports</h3>
+                <p className="text-sm text-muted-foreground">Manage laboratory test requests and results</p>
+              </div>
+              <Button onClick={() => setShowTestingModal(true)}>
+                <TestTube className="h-4 w-4 mr-2" />
+                Request Lab Test
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Pending Tests</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-yellow-600">
+                    {testingReports.filter((r: any) => r.status === 'pending').length}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {testingReports.filter((r: any) => r.status === 'received').length}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Completed</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">
+                    {testingReports.filter((r: any) => r.status === 'completed').length}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Testing Reports</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {testingReports.slice(0, 10).map((report: any) => (
+                    <div key={report.id} className="flex justify-between items-center p-3 border rounded-lg">
+                      <div>
+                        <div className="font-medium">{report.animals?.name} ({report.animals?.tag_id})</div>
+                        <div className="text-sm text-muted-foreground">
+                          {report.test_type} • {report.sample_type}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Requested: {new Date(report.requested_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <Badge variant={
+                          report.status === 'completed' ? 'default' : 
+                          report.status === 'received' ? 'secondary' : 'outline'
+                        }>
+                          {report.status}
+                        </Badge>
+                        {report.priority === 'high' && (
+                          <Badge variant="destructive" className="ml-2">HIGH</Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {testingReports.length === 0 && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      No testing reports found. Create your first lab test request!
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

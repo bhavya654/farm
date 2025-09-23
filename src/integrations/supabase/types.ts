@@ -400,6 +400,66 @@ export type Database = {
           },
         ]
       }
+      testing_reports: {
+        Row: {
+          animal_id: string
+          attachments: Json | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          lab_id: string | null
+          notes: string | null
+          priority: string | null
+          received_at: string | null
+          requested_at: string | null
+          results: string | null
+          sample_type: string
+          status: string
+          test_description: string | null
+          test_type: string
+          updated_at: string | null
+          vet_id: string
+        }
+        Insert: {
+          animal_id: string
+          attachments?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          lab_id?: string | null
+          notes?: string | null
+          priority?: string | null
+          received_at?: string | null
+          requested_at?: string | null
+          results?: string | null
+          sample_type: string
+          status?: string
+          test_description?: string | null
+          test_type: string
+          updated_at?: string | null
+          vet_id: string
+        }
+        Update: {
+          animal_id?: string
+          attachments?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          lab_id?: string | null
+          notes?: string | null
+          priority?: string | null
+          received_at?: string | null
+          requested_at?: string | null
+          results?: string | null
+          sample_type?: string
+          status?: string
+          test_description?: string | null
+          test_type?: string
+          updated_at?: string | null
+          vet_id?: string
+        }
+        Relationships: []
+      }
       treatments: {
         Row: {
           animal_id: string
@@ -469,7 +529,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
