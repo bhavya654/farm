@@ -77,15 +77,37 @@ const FarmerDashboard = () => {
         .select('id')
         .eq('owner_id', profile?.id);
 
+      let farmId = null;
+      
       if (farms && farms.length > 0) {
-        const farmIds = farms.map(farm => farm.id);
-        setUserFarmId(farms[0].id); // Set first farm as default
+        farmId = farms[0].id;
+        setUserFarmId(farmId);
+      } else {
+        // Create a default farm if none exists
+        const { data: newFarm, error: farmError } = await supabase
+          .from('farms')
+          .insert([{
+            farm_name: `${profile?.full_name}'s Farm`,
+            address: 'Not specified',
+            owner_id: profile?.id
+          }])
+          .select('id')
+          .single();
+          
+        if (farmError) {
+          console.error('Error creating default farm:', farmError);
+        } else {
+          farmId = newFarm.id;
+          setUserFarmId(farmId);
+        }
+      }
 
+      if (farmId) {
         // Fetch animals
         const { data: animalsData } = await supabase
           .from('animals')
           .select('*')
-          .in('farm_id', farmIds)
+          .eq('farm_id', farmId)
           .order('created_at', { ascending: false });
 
         // Fetch today's tasks
@@ -104,7 +126,7 @@ const FarmerDashboard = () => {
         const { data: alertsData } = await supabase
           .from('compliance_alerts')
           .select('*')
-          .in('farm_id', farmIds)
+          .eq('farm_id', farmId)
           .eq('status', 'active')
           .order('created_at', { ascending: false });
 
@@ -490,14 +512,12 @@ const FarmerDashboard = () => {
           </TabsContent>
         </Tabs>
         
-        {userFarmId && (
-          <AnimalManagementModal
-            open={showAnimalModal}
-            onOpenChange={setShowAnimalModal}
-            farmId={userFarmId}
-            onAnimalAdded={fetchDashboardData}
-          />
-        )}
+        <AnimalManagementModal
+          open={showAnimalModal}
+          onOpenChange={setShowAnimalModal}
+          farmId={userFarmId || ''}
+          onAnimalAdded={fetchDashboardData}
+        />
         
         <Chatbot context="farmer" />
       </div>

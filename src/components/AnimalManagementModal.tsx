@@ -125,6 +125,15 @@ const AnimalManagementModal: React.FC<AnimalManagementModalProps> = ({
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
+    
+    if (!farmId) {
+      toast({
+        title: "No Farm Found",
+        description: "Please contact support to set up your farm first.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
