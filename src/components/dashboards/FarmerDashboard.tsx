@@ -31,8 +31,10 @@ const FarmerDashboard = () => {
   const [animals, setAnimals] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [alerts, setAlerts] = useState([]);
+  const [prescriptionTasks, setPrescriptionTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAnimalModal, setShowAnimalModal] = useState(false);
+  const [showPrescriptionTasks, setShowPrescriptionTasks] = useState(false);
   const [userFarmId, setUserFarmId] = useState<string | null>(null);
 
   const getChartData = () => {
@@ -430,41 +432,20 @@ const FarmerDashboard = () => {
                   <Card>
                     <CardContent className="p-6 text-center">
                       <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
-                      <h3 className="font-semibold mb-2">Emergency Contact</h3>
+                      <h3 className="font-semibold mb-2">Report Problem</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Report urgent health issues
+                        Report detailed animal health issues
                       </p>
-                      <Button variant="outline" className="w-full" onClick={() => {
-                        // Create consultation request functionality
-                        const reportProblem = async () => {
-                          try {
-                            const { error } = await supabase
-                              .from('consultation_requests')
-                              .insert({
-                                farmer_id: profile?.id,
-                                consultation_type: 'emergency',
-                                symptoms: 'Urgent health issue reported via emergency button',
-                                priority: 'emergency',
-                                status: 'pending'
-                              });
-                            
-                            if (error) throw error;
-                            
-                            toast({
-                              title: "Emergency Report Sent",
-                              description: "A veterinarian will respond to your emergency request shortly",
-                            });
-                          } catch (error) {
-                            console.error('Error reporting problem:', error);
-                            toast({
-                              title: "Error",
-                              description: "Failed to send emergency report. Please try again.",
-                              variant: "destructive",
-                            });
-                          }
-                        };
-                        reportProblem();
-                      }}>Report Problem</Button>
+                      <ProblemReportModal
+                        farmerId={profile?.id || ''}
+                        animals={animals}
+                        trigger={
+                          <Button variant="outline" className="w-full">
+                            <Phone className="h-4 w-4 mr-2" />
+                            Report Problem
+                          </Button>
+                        }
+                      />
                     </CardContent>
                   </Card>
                 </div>
@@ -517,6 +498,13 @@ const FarmerDashboard = () => {
           onOpenChange={setShowAnimalModal}
           farmId={userFarmId || ''}
           onAnimalAdded={fetchDashboardData}
+        />
+
+        <PrescriptionTasksModal
+          open={showPrescriptionTasks}
+          onOpenChange={setShowPrescriptionTasks}
+          farmerId={profile?.id || ''}
+          onTaskComplete={fetchDashboardData}
         />
         
         <Chatbot context="farmer" />

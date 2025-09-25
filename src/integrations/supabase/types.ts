@@ -295,6 +295,105 @@ export type Database = {
         }
         Relationships: []
       }
+      prescription_tasks: {
+        Row: {
+          animal_id: string
+          completed_at: string | null
+          created_at: string | null
+          dosage: string
+          farmer_id: string
+          id: string
+          is_completed: boolean | null
+          medication_name: string
+          points_awarded: number | null
+          scheduled_date: string
+          scheduled_time: string
+          treatment_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          animal_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          dosage: string
+          farmer_id: string
+          id?: string
+          is_completed?: boolean | null
+          medication_name: string
+          points_awarded?: number | null
+          scheduled_date: string
+          scheduled_time: string
+          treatment_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          animal_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          dosage?: string
+          farmer_id?: string
+          id?: string
+          is_completed?: boolean | null
+          medication_name?: string
+          points_awarded?: number | null
+          scheduled_date?: string
+          scheduled_time?: string
+          treatment_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      problem_reports: {
+        Row: {
+          animal_id: string | null
+          created_at: string | null
+          description: string | null
+          farmer_id: string
+          id: string
+          images: Json | null
+          problem_type: string
+          responded_at: string | null
+          severity: string | null
+          status: string | null
+          symptoms: string
+          updated_at: string | null
+          vet_id: string | null
+          vet_response: string | null
+        }
+        Insert: {
+          animal_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          farmer_id: string
+          id?: string
+          images?: Json | null
+          problem_type: string
+          responded_at?: string | null
+          severity?: string | null
+          status?: string | null
+          symptoms: string
+          updated_at?: string | null
+          vet_id?: string | null
+          vet_response?: string | null
+        }
+        Update: {
+          animal_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          farmer_id?: string
+          id?: string
+          images?: Json | null
+          problem_type?: string
+          responded_at?: string | null
+          severity?: string | null
+          status?: string | null
+          symptoms?: string
+          updated_at?: string | null
+          vet_id?: string | null
+          vet_response?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           address: string | null
