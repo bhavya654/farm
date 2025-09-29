@@ -35,7 +35,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">FarmGuard</span>
+              <span className="text-xl font-bold">JeevSarthi</span>
             </div>
             <p className="text-background/80 mb-6 max-w-md">
               Empowering farmers and veterinarians with comprehensive MRL and AMU monitoring 
@@ -44,7 +44,7 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-primary" />
-                <span className="text-sm text-background/80">support@farmguard.com</span>
+                <span className="text-sm text-background/80">support@JeevSarthi.com</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-primary" />
@@ -113,7 +113,7 @@ const Footer = () => {
         <div className="border-t border-background/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-background/60 mb-4 md:mb-0">
-              © {currentYear} FarmGuard. All rights reserved. | Ensuring food safety through technology.
+              © {currentYear} JeevSarthi. All rights reserved. | Ensuring food safety through technology.
             </div>
             <div className="flex space-x-6">
               <Link

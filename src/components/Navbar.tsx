@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import logoimage from "@/assets/jeevsar.png";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -19,10 +19,10 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-primary-foreground" />
+            <div className=" rounded-lg flex items-center justify-center">
+              <img src={logoimage} alt="JeevSarthi Logo" className="w-10 h-10" />
             </div>
-            <span className="text-xl font-bold text-foreground">FarmGuard</span>
+            <span className="text-xl font-bold text-foreground ">Jeev<span className="">Sarthi</span></span>
           </div>
 
           {/* Desktop Navigation */}
@@ -39,10 +39,14 @@ const Navbar = () => {
           </div>
 
           {/* Desktop CTA Button */}
-          <div className="hidden md:flex">
+          <div className="hidden md:flex  gap-4">
             <Link to="/auth">
+              <Button variant="default" className="shadow-soft hover:shadow-medium transition-smooth mr-3">
+                Login  
+              </Button>
+
               <Button variant="default" className="shadow-soft hover:shadow-medium transition-smooth">
-                Login / Sign Up
+               Sign Up
               </Button>
             </Link>
           </div>
