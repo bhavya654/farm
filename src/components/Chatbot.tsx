@@ -96,7 +96,7 @@ const Chatbot: React.FC<{ className?: string }> = ({ className }) => {
       {/* This component loads the Voiceflow script once and for all.
         It renders `null`, so it's invisible.
       */}
-      <VoiceflowChatbot />
+      {/* <VoiceflowChatbot /> */}
 
       <div className={cn("fixed bottom-4 right-4 z-50", className)}>
         {!isCustomChatOpen ? (
@@ -109,7 +109,7 @@ const Chatbot: React.FC<{ className?: string }> = ({ className }) => {
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="flex items-center gap-2 text-md">
                 <Bot className="h-4 w-4" />
-                Quick Assistant
+                Farmer Assistant
               </CardTitle>
               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsCustomChatOpen(false)}>
                 <X className="h-4 w-4" />
