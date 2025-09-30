@@ -19,9 +19,13 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className=" rounded-lg flex items-center justify-center">
+            {/* <div className=" rounded-lg flex items-center justify-center">
               <img src={logoimage} alt="JeevSarthi Logo" className="w-10 h-10" />
-            </div>
+            </div> */}
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <Leaf className="w-5 h-5 text-primary-foreground" />
+              </div>
+           
             <span className="text-xl font-bold text-foreground ">Jeev<span className="">Sarthi</span></span>
           </div>
 

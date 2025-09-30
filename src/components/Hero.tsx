@@ -26,7 +26,7 @@ const Hero = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-slide-up">
+          <h1 className="text-4xl md:text-6xl pt-8 lg:text-7xl font-bold text-white mb-6 leading-tight animate-slide-up">
             Digital Farm Management for{" "}
             <span className="gradient-hero bg-clip-text text-transparent">
               MRL & AMU Monitoring
