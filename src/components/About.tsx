@@ -31,10 +31,10 @@ const About = () => {
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             About{" "}
-            <span className="gradient-primary bg-clip-text text-transparent">FarmGuard</span>
+            <span className="gradient-primary bg-clip-text text-transparent">JeevSarthi</span>
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
-            FarmGuard is a comprehensive digital platform designed to revolutionize farm management through 
+            JeevSarthi is a comprehensive digital platform designed to revolutionize farm management through 
             advanced MRL (Maximum Residue Limits) and AMU (Antimicrobial Usage) monitoring. We bridge the gap 
             between regulatory compliance and practical farm operations.
           </p>
@@ -47,7 +47,7 @@ const About = () => {
             </h3>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
               In today's agricultural landscape, ensuring food safety while maintaining animal health requires 
-              precise monitoring and compliance with strict regulations. FarmGuard provides farmers, veterinarians, 
+              precise monitoring and compliance with strict regulations. JeevSarthi provides farmers, veterinarians, 
               and administrators with the tools they need to succeed.
             </p>
             <div className="space-y-4">

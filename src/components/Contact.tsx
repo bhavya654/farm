@@ -35,7 +35,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      detail: "support@farmguard.com",
+      detail: "support@JeevSarthi.com",
       description: "Send us an email anytime"
     },
     {
@@ -67,7 +67,7 @@ const Contact = () => {
             <span className="gradient-primary bg-clip-text text-transparent">Touch</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Have questions about FarmGuard or need assistance with compliance monitoring? 
+            Have questions about JeevSarthi or need assistance with compliance monitoring? 
             Our team is here to help you succeed.
           </p>
         </div>

@@ -111,7 +111,7 @@ const Features = () => {
             Ready to Transform Your Farm Management?
           </h3>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of farmers and veterinarians who trust FarmGuard for their compliance and monitoring needs.
+            Join thousands of farmers and veterinarians who trust JeevSarthi for their compliance and monitoring needs.
           </p>
         </div>
       </div>
