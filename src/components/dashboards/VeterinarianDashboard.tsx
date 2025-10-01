@@ -233,7 +233,7 @@ const VeterinarianDashboard = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Stethoscope className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold text-primary">FarmGuard</h1>
+                <h1 className="text-2xl font-bold text-primary">JeevSarthi</h1>
               </div>
               <Badge variant="secondary" className="ml-4">
                 Veterinarian Dashboard
